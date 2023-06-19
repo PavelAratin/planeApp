@@ -1,4 +1,4 @@
-import { ContentWrapper } from "../contentWrapper/ContentWrapper";
+import ContentWrapper from "../contentWrapper/ContentWrapper";
 import WaveImage from "./wave.svg";
 import styles from "./styles.module.css";
 
