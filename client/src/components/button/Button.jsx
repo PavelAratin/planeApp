@@ -12,7 +12,8 @@ const Button = ({
       <span
         className={`${
           isBackButton ? styles.backButton : styles.button
-        } ${className}`}>
+        } ${className}`}
+        onClick={onClick}>
         {children}
       </span>
     </div>
