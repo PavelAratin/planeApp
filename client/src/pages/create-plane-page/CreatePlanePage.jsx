@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./styles.module.css";
 import ContentWrapper from "../../components/contentWrapper/ContentWrapper";
 import Button from "../../components/button/Button";
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/input/Input";
+import { createPlane } from "../../store/plane/planeSlice";
+import { paths } from "../../path/path";
 
 const CreatePlanePage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { errors } = useSelector((state) => state.plane);
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [capacity, setCapacity] = useState("");
+  const [planeImage, setPlaneImage] = useState(null);
+
+  const handlerCreatePlane = useCallback(() => {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("description", description);
+    formData.append("capacity", capacity);
+    formData.append("planeImage", planeImage);
+    dispatch(createPlane(formData)).then((res) => {
+      if (!res.error) {
+        navigate(`${paths.plane}/${res.payload._id}`, { replace: true });
+      }
+    });
+  }, [name, price, description, capacity, planeImage, dispatch, navigate]);
   return (
     <ContentWrapper className={styles.createName}>
       <Button
@@ -20,27 +44,31 @@ const CreatePlanePage = () => {
         <Input
           name='name'
           placeholder='Название самолета'
-          onChange={() => null}></Input>
+          error={errors && errors.name && errors.name.message}
+          onChange={(e) => setName(e.target.value)}></Input>
         <Input
           name='price'
           placeholder='Цена самолета'
-          onChange={() => null}></Input>
+          error={errors && errors.price && errors.price.message}
+          onChange={(e) => setPrice(e.target.value)}></Input>
         <Input
           name='description'
           placeholder='Описание самолета'
-          onChange={() => null}></Input>
+          error={errors && errors.description && errors.description.message}
+          onChange={(e) => setDescription(e.target.value)}></Input>
         <Input
           name='capacity'
           placeholder='Вместимость самолета'
-          onChange={() => null}></Input>
+          error={errors && errors.capacity && errors.capacity.message}
+          onChange={(e) => setCapacity(e.target.value)}></Input>
         <Input
           name='planeImage'
           type='file'
-          placeholder='Вместимость самолета'
-          onChange={() => null}></Input>
+          error={errors && errors.planeImage && errors.planeImage.message}
+          onChange={(e) => setPlaneImage(e.target.files[0])}></Input>
         <Button
           containerClassName={styles.buttonContainer}
-          onClick={() => null}>
+          onClick={handlerCreatePlane}>
           Создать
         </Button>
       </form>

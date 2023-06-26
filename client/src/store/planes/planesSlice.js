@@ -16,6 +16,7 @@ const planesSlice = createSlice({
     isError: false,
     isLoading: false,
     message: '',
+    errors: null
   },
   extraReducers: (builder) => {
     builder.addCase(getPlanes.pending, (state) => {
@@ -33,5 +34,4 @@ const planesSlice = createSlice({
     });
   }
 });
-
 export default planesSlice.reducer;
